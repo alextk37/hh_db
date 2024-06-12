@@ -3,6 +3,7 @@ from get_data.company_config import company_key as keys
 from get_data.get_vacancies import HHVacanciesParser
 
 company_search = HHCompanyParser(keys)
+cleaner()
 if isinstance(company_search, HHCompanyParser):
     print('Локальные данные не обнаружены.')
     print('Загружаю информацию по компаниям из "company_config"')
