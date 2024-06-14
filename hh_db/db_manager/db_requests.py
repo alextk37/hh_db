@@ -148,8 +148,11 @@ class DBRequests():
         '''
         Возвращает названия компаний и количество открытых вакансий.
         '''
-        prompt = '''SELECT name, open_vacancies
-                    FROM employers
+        prompt = '''SELECT  e.name, COUNT(*)
+                    FROM employers as e
+                    JOIN vacancies as v
+                    ON v.employer = e.id
+                    GROUP BY e.name
                     '''
         return self.db.req_resp(prompt)
 
