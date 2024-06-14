@@ -18,6 +18,9 @@ class HHVacanciesParser():
     """
 
     def __init__(self) -> None:
+        '''
+        Инициализирует экземпляр класса HHVacanciesParser
+        '''
         self.employers_path = os.path.abspath('get_data/data_employers')
         self.employers_file = os.listdir(self.employers_path)[0]
         self.path = os.path.join(self.employers_path, self.employers_file)
@@ -25,6 +28,9 @@ class HHVacanciesParser():
         self.now = dt.now()
 
     def get_urls(self):
+        '''
+        Получает список URL-адресов вакансий из файла JSON.
+        '''
         with open(self.path,
                   'r',
                   encoding='utf-8') as json_file:
@@ -35,6 +41,9 @@ class HHVacanciesParser():
             return urls
 
     def get_data(self):
+        '''
+        Получает данные о вакансиях.
+        '''
         urls = self.get_urls()
         for url in urls:
             response = requests.get(url)
@@ -42,6 +51,9 @@ class HHVacanciesParser():
             self.vacancies.extend(vacancies)
 
     def save_data(self):
+        '''
+        Сохраняет данные о вакансиях в файл JSON.
+        '''
         f = '%d-%m-%Y %H:%M:%S'
         abs_path = os.path.abspath('get_data/data_vacancies')
         if not os.listdir(abs_path):

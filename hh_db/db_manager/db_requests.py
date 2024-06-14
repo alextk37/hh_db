@@ -30,13 +30,22 @@ class DBRequests():
     """
 
     def __init__(self) -> None:
+        '''
+        Инициализирует экземпляр класса DBRequests.
+        '''
         self.db = DBManager(**db_conf)
 
     def get_version(self):
+        '''
+        Возвращает версию базы данных.
+        '''
         prompt = 'SELECT version();'
         return self.db.req_resp(prompt)
 
     def drop_table(self):
+        '''
+        Удаляет таблицы 'vacancies' и 'employers' из базы данных.
+        '''
         prompt = '''
                   DROP TABLE IF EXISTS public.vacancies;
                   DROP TABLE IF EXISTS public.employers;
@@ -44,6 +53,9 @@ class DBRequests():
         self.db.req_not_resp(prompt)
 
     def show_tables(self):
+        '''
+        Возвращает список таблиц в базе данных.
+        '''
         prompt = '''SELECT table_name
                     FROM information_schema.tables
                     WHERE table_schema = 'public'
@@ -52,6 +64,9 @@ class DBRequests():
         return self.db.req_resp(prompt)
 
     def create_tables(self):
+        '''
+        Создает таблицы 'employers' и 'vacancies' в базе данных.
+        '''
         prompt = '''
                   CREATE TABLE employers (
                     id VARCHAR(255) NOT NULL PRIMARY KEY,
@@ -71,6 +86,9 @@ class DBRequests():
         self.db.req_not_resp(prompt)
 
     def filling_emp(self):
+        '''
+        Заполняет таблицу 'employers' данными из JSON-файла.
+        '''
         with open(emp_file, 'r', encoding='utf-8') as json_file:
             json_data = json.load(json_file)
             for data in json_data:
@@ -87,6 +105,9 @@ class DBRequests():
                 self.db.req_not_resp(prompt)
 
     def filling_vac(self):
+        '''
+        Заполняет таблицу 'vacancies' данными из JSON-файла
+        '''
         with open(vac_file, 'r', encoding='utf-8') as json_file:
             json_data = json.load(json_file)
             for data in json_data:
@@ -116,12 +137,19 @@ class DBRequests():
                 self.db.req_not_resp(prompt)
 
     def get_companies_and_vacancies_count(self):
+        '''
+        Возвращает названия компаний и количество открытых вакансий.
+        '''
         prompt = '''SELECT name, open_vacancies
                     FROM employers
                     '''
         return self.db.req_resp(prompt)
 
     def get_all_vacancies(self):
+        '''
+        Возвращает все вакансии с информацией о компании,
+        названии вакансии, зарплате и URL.
+        '''
         prompt = '''SELECT e.name,
                            v.name,
                            v.salary,
@@ -133,12 +161,18 @@ class DBRequests():
         return self.db.req_resp(prompt)
 
     def get_avg_salary(self):
+        '''
+        Возвращает среднюю зарплату по всем вакансиям.
+        '''
         prompt = '''SELECT ROUND(AVG(v.salary))
                     FROM vacancies AS v
                   '''
         return self.db.req_resp(prompt)
 
     def get_vacancies_with_higher_salary(self):
+        '''
+        Возвращает вакансии с зарплатой выше среднего значения.
+        '''
         prompt = '''SELECT name, salary, url
                     FROM vacancies
                     WHERE salary > (SELECT AVG(salary) FROM vacancies);
@@ -146,6 +180,13 @@ class DBRequests():
         return self.db.req_resp(prompt)
 
     def get_vacancies_with_keyword(self, keyword):
+        '''
+        Возвращает вакансии, содержащие ключевое слово в названии.
+
+        Параметры:
+          self (object): экземпляр класса.
+          keyword (str): ключевое слово для поиска в названиях вакансий
+        '''
         prompt = f'''SELECT name, salary, url
                      FROM vacancies
                      WHERE name LIKE '%{keyword}%';
