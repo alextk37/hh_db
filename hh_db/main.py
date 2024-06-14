@@ -1,8 +1,12 @@
 from get_data.get_company import HHCompanyParser, cleaner
 from get_data.company_config import company_key as keys
 from get_data.get_vacancies import HHVacanciesParser
+from db_manager.db_requests import DBRequests
+import os
 
-cleaner()
+emp_path = os.path.abspath('get_data/data_employers')
+if os.listdir(emp_path):
+    cleaner()
 company_search = HHCompanyParser(keys)
 if isinstance(company_search, HHCompanyParser):
     print('Локальные данные не обнаружены.')
@@ -12,7 +16,6 @@ if isinstance(company_search, HHCompanyParser):
     vacancies = HHVacanciesParser()
     vacancies.save_data()
 
-from db_manager.db_requests import DBRequests
 print('Пишу в базу данных')
 req = DBRequests()
 req.drop_table()

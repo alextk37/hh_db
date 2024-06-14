@@ -1,6 +1,6 @@
+import os
 import json
 from db_manager.db_manager import DBManager
-from db_manager.config import emp_file, vac_file
 from db_manager.get_db_config import config
 
 
@@ -91,6 +91,9 @@ class DBRequests():
         '''
         Заполняет таблицу 'employers' данными из JSON-файла.
         '''
+        emp_path = os.path.abspath('get_data/data_employers')
+        emp_name = os.listdir(emp_path)[0]
+        emp_file = os.path.join(emp_path, emp_name)
         with open(emp_file, 'r', encoding='utf-8') as json_file:
             json_data = json.load(json_file)
             for data in json_data:
@@ -110,6 +113,9 @@ class DBRequests():
         '''
         Заполняет таблицу 'vacancies' данными из JSON-файла
         '''
+        vac_path = os.path.abspath('get_data/data_vacancies')
+        vac_name = os.listdir(vac_path)[0]
+        vac_file = os.path.join(vac_path, vac_name)
         with open(vac_file, 'r', encoding='utf-8') as json_file:
             json_data = json.load(json_file)
             for data in json_data:
