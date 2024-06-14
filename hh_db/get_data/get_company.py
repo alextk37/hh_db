@@ -23,10 +23,16 @@ class HHCompanyParser():
     abs_path = os.path.abspath('get_data/data_employers')
 
     def __new__(cls,  *args, **kwargs):
+        '''
+        Создает новый экземпляр класса, если директория пуста.
+        '''
         if not os.listdir(cls.abs_path):
             return super().__new__(cls)
 
     def __init__(self, keywords) -> None:
+        '''
+        Инициализирует экземпляр класса HHCompanyParser
+        '''
         self.search_url = 'https://api.hh.ru/employers'
         self.keywords = keywords
         self.params = {'text': '',
@@ -37,6 +43,10 @@ class HHCompanyParser():
         self.now = dt.now()
 
     def __find_id(self):
+        '''
+        Находит и сохраняет идентификаторы работодателей
+          для каждого ключевого слова.
+        '''
         for key in self.keywords:
             self.params['text'] = key
             response = requests.get(self.search_url,
@@ -46,6 +56,9 @@ class HHCompanyParser():
             self.__employers_id.append(id)
 
     def save_data(self):
+        '''
+        Сохраняет данные в файл JSON.
+        '''
         self.__find_id()
         for id in self.__employers_id:
             url = self.search_url + '/' + str(id)
@@ -62,6 +75,9 @@ class HHCompanyParser():
 
 
 def cleaner():
+    '''
+    Очищает директории с данными.
+    '''
     emp_path = os.path.abspath('get_data/data_employers')
     vac_path = os.path.abspath('get_data/data_vacancies')
     ls_emp = os.listdir(emp_path)
