@@ -1,10 +1,5 @@
 import os
 
-db_conf = {'dbname': 'postgres',
-           'user': 'postgres',
-           'password': 'secret',
-           'host': 'localhost',
-           'port': '5438'}
 
 emp_path = os.path.abspath('get_data/data_employers')
 emp_name = os.listdir(emp_path)[0]

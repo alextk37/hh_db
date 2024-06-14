@@ -1,6 +1,7 @@
 import json
 from db_manager.db_manager import DBManager
-from db_manager.config import db_conf, emp_file, vac_file
+from db_manager.config import emp_file, vac_file
+from db_manager.get_db_config import config
 
 
 class DBRequests():
@@ -28,12 +29,13 @@ class DBRequests():
             вакансии, содержащие ключевое слово
 
     """
+    params = config()
 
     def __init__(self) -> None:
         '''
         Инициализирует экземпляр класса DBRequests.
         '''
-        self.db = DBManager(**db_conf)
+        self.db = DBManager(**self.params)
 
     def get_version(self):
         '''
